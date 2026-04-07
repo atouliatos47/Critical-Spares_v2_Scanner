@@ -1,0 +1,154 @@
+{
+  "items": [],
+  "workstations": [
+    {
+      "id": 3,
+      "name": "Amada",
+      "description": "Power Press",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:42:09.003Z"
+    },
+    {
+      "id": 4,
+      "name": "Bihler",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:42:18.767Z"
+    },
+    {
+      "id": 5,
+      "name": "Bruderer 1",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:42:29.384Z"
+    },
+    {
+      "id": 6,
+      "name": "Bruderer 2",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:42:37.650Z"
+    },
+    {
+      "id": 7,
+      "name": "Bruderer 3",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:42:44.265Z"
+    },
+    {
+      "id": 8,
+      "name": "Bruderer 60T",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:43:00.163Z"
+    },
+    {
+      "id": 9,
+      "name": "Chin Fong ISI 1",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:43:19.418Z"
+    },
+    {
+      "id": 10,
+      "name": "Chin Fong ISI 74",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:44:54.535Z"
+    },
+    {
+      "id": 11,
+      "name": "Finzer 16",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:45:17.268Z"
+    },
+    {
+      "id": 12,
+      "name": "Finzer 17",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:45:22.601Z"
+    },
+    {
+      "id": 13,
+      "name": "Finzer 18",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:45:27.446Z"
+    },
+    {
+      "id": 14,
+      "name": "Finzer 19",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:45:33.443Z"
+    },
+    {
+      "id": 15,
+      "name": "Finzer 20",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:45:42.050Z"
+    },
+    {
+      "id": 16,
+      "name": "Heenan 1",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:45:54.185Z"
+    },
+    {
+      "id": 17,
+      "name": "Heenan 2",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:45:59.096Z"
+    },
+    {
+      "id": 18,
+      "name": "Heenan 3",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:46:03.394Z"
+    },
+    {
+      "id": 19,
+      "name": "HME 20T A ISI23",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:46:19.470Z"
+    },
+    {
+      "id": 20,
+      "name": "HME 20T A ISI22",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:46:24.596Z"
+    },
+    {
+      "id": 21,
+      "name": "Kaiser 50T 1",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:46:35.220Z"
+    },
+    {
+      "id": 22,
+      "name": "Kaiser 50T 2",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:46:41.020Z"
+    },
+    {
+      "id": 23,
+      "name": "6029 Rockwell 1",
+      "description": "",
+      "addedBy": "Andreas Touliatos",
+      "createdAt": "2026-03-12T09:46:50.441Z"
+    }
+  ],
+  "nextId": 3,
+  "nextWsId": 24
+}

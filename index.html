@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2D4A5C">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Spares">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/icon-180.png">
+    <title>Critical Spares Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+</head>
+<body>
+
+    <!-- HOME SCREEN -->
+    <div id="homeScreen" class="home-screen hidden" onclick="UI.hideHome()">
+        <div class="home-bg-grid"></div>
+        <div class="home-content">
+            <img src="img/logo.png" alt="Clamason" class="home-logo">
+            <div class="home-divider"></div>
+            <div class="home-clock" id="homeClock">00:00</div>
+            <div class="home-seconds" id="homeSeconds">:00</div>
+            <div class="home-date" id="homeDate">Friday, 13 March 2026</div>
+            <div class="home-app-label">Critical Spares Tracker</div>
+            <div class="home-hint">TAP ANYWHERE TO CONTINUE</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="img/logo.png" alt="Clamason" style="height: 54px;">
+                <span style="font-weight: 700; font-size: 16px; opacity: 0.85;">Critical Spares</span>
+            </div>
+            <div class="connection-badge" id="connBadge">● Live</div>
+        </div>
+
+        <div id="nameScreen">
+            <div class="name-setup-card">
+                <div class="welcome-logo">📋</div>
+                <h2 style="margin-bottom: 10px; color: #2D4A5C;">Critical Spares Tracker</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Enter your name to start tracking</p>
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="nameInput" placeholder="Your name" style="width: 100%; padding: 14px; border: 2px solid #e2e5ea; border-radius: 8px; font-size: 16px;">
+                </div>
+                <button class="btn-name" onclick="App.setName()">Get Started</button>
+            </div>
+        </div>
+
+        <div id="appScreen" class="hidden">
+            <div class="stats-bar">
+                <div class="stat-card" onclick="UI.showStats()">
+                    <div class="stat-number" id="totalItems">0</div>
+                    <div class="stat-label">Parts</div>
+                </div>
+                <div class="stat-card" onclick="Components.showStockModal()" style="cursor: pointer;">
+                    <div class="stat-number" id="totalQty">0</div>
+                    <div class="stat-label">Stock</div>
+                </div>
+                <div class="stat-card" onclick="UI.setFilter('low'); UI.switchTab('list');">
+                    <div class="stat-number warning" id="lowCount">0</div>
+                    <div class="stat-label">Low</div>
+                </div>
+            </div>
+
+            <div class="alert-banner" id="alertBanner" onclick="UI.scrollToAlerts()"></div>
+
+            <div id="alertsSection" class="alerts-section hidden">
+                <div class="alerts-container">
+                    <div class="alerts-header">
+                        <span class="alert-icon">⚠️</span>
+                        <span class="alert-title">Immediate Attention Required</span>
+                    </div>
+                    <div id="alertsList" class="alerts-list"></div>
+                    <div class="alerts-footer">These items are below minimum stock level</div>
+                </div>
+            </div>
+
+            <div class="users-section">
+                <div class="users-header">
+                    <div class="users-title"><span style="font-size: 16px; margin-right: 5px;">👥</span> Connected Team</div>
+                    <div class="user-count" id="userCount">0</div>
+                </div>
+                <div class="user-list" id="userList">
+                    <div style="color: #6b7280; font-size: 13px; padding: 5px;">Connecting...</div>
+                </div>
+            </div>
+
+            <!-- spacer so content doesn't hide behind bottom nav -->
+            <div style="height: 80px;"></div>
+
+            <div id="addView" class="hidden">
+                <div class="form-card">
+                    <h3 style="margin-bottom: 20px; color: #2D4A5C;">Add Spare Part</h3>
+                    <div class="form-row">
+                        <label>Part No. (Barcode)</label>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="text" id="partNo" placeholder="Scan or enter part number" style="background: #f0f2f5; flex: 1; margin: 0;">
+                            <button id="clearPartNo" onclick="UI.clearPartNo()" style="display:none; flex-shrink:0; width:36px; height:36px; border-radius:50%; border:none; background:#fee2e2; color:#dc2626; font-size:18px; cursor:pointer; font-weight:700; line-height:1;">✕</button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label>Part Name *</label>
+                        <input type="text" id="partName" placeholder="e.g. Contactor LC1D25">
+                    </div>
+                    <div class="form-row">
+                        <label>Workstation</label>
+                        <select id="partWorkstation" class="form-select">
+                            <option value="">— No Workstation —</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>Location</label>
+                        <input type="text" id="partLocation" placeholder="e.g. Press 4, Bay 2">
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <label>Quantity</label>
+                            <input type="number" id="partQty" value="1" min="0">
+                        </div>
+                        <div class="form-row">
+                            <label>Min Stock</label>
+                            <input type="number" id="partMinStock" value="0" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label>Notes</label>
+                        <textarea id="partNotes" rows="2" placeholder="Supplier, part number, etc."></textarea>
+                    </div>
+                    <button class="btn-submit" onclick="UI.addItem()">Add to Stock</button>
+                </div>
+            </div>
+
+            <div id="listView" class="hidden">
+                <div class="filter-row">
+                    <button class="filter-btn active" onclick="UI.setFilter('all')" id="filterAll">All</button>
+                    <button class="filter-btn danger" onclick="UI.setFilter('low')" id="filterLow">Low Stock</button>
+                </div>
+                <div class="search-row">
+                    <input type="text" id="searchInput" placeholder="🔍 Search parts or workstations..." onkeyup="UI.debounceSearch()">
+                </div>
+                <div class="items-list" id="itemsList"></div>
+            </div>
+
+            <div id="workstationsView" class="hidden">
+                <div class="form-card" style="margin-bottom: 20px;">
+                    <h3 style="margin-bottom: 20px; color: #2D4A5C;">Add Workstation</h3>
+                    <div class="form-row">
+                        <label>Workstation Name *</label>
+                        <input type="text" id="wsName" placeholder="e.g. Press 4, Assembly Line 1">
+                    </div>
+                    <div class="form-row">
+                        <label>Description</label>
+                        <input type="text" id="wsDescription" placeholder="e.g. Hydraulic press, Bay 2">
+                    </div>
+                    <button class="btn-submit" onclick="UI.addWorkstation()">Add Workstation</button>
+                </div>
+
+                <div class="form-card" style="margin-bottom: 20px;">
+                    <label style="display: block; font-size: 12px; font-weight: 600; color: #6b7280; margin-bottom: 10px; text-transform: uppercase;">Quick Select Workstation</label>
+                    <select id="wsQuickSelect" class="form-select" onchange="UI.handleWsSelect(this.value)">
+                        <option value="">— Show All Workstations —</option>
+                    </select>
+                </div>
+                <div class="items-list" id="workstationsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="scannerModal">
+        <div class="modal" style="max-width: 500px; padding: 20px;">
+            <h2 style="color: #2D4A5C; margin-bottom: 15px;">📷 Barcode Scanner</h2>
+            <div id="reader" style="width: 100%; border-radius: 12px; overflow: hidden; background: #000;"></div>
+            <button class="btn-submit" style="background: #ef4444; margin-top: 15px;" onclick="UI.closeScanner()">Cancel</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay" style="z-index: 10001;">
+        <div class="modal" id="modal"></div>
+    </div>
+
+    <div class="modal-overlay" id="contentModalOverlay" style="z-index: 9000;">
+        <div class="modal" id="contentModal" style="width:100%; max-width:600px; max-height:85vh; display:flex; flex-direction:column; padding:0; overflow:hidden;"></div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav" style="z-index: 10000;">
+        <button class="bnav-item" onclick="Components.showAddModal()" id="tabAdd">
+            <span class="bnav-icon">＋</span>
+            <span class="bnav-label">Add Part</span>
+        </button>
+        <button class="bnav-item" onclick="Components.showStockModal()" id="tabList">
+            <span class="bnav-icon">📦</span>
+            <span class="bnav-label">Stock <span class="low-badge" id="lowBadge" style="display:none;">0</span></span>
+        </button>
+        <button class="bnav-home" onclick="UI.goToDashboard()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+        </button>
+        <button class="bnav-item" onclick="UI.openScanner()" id="tabScan">
+            <span class="bnav-icon">📷</span>
+            <span class="bnav-label">Scan</span>
+        </button>
+        <button class="bnav-item" onclick="Components.showMachinesModal()" id="tabWorkstations">
+            <span class="bnav-icon">🏭</span>
+            <span class="bnav-label">Machines</span>
+        </button>
+    </nav>
+
+    <script src="socket.io/socket.io.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/scanner.js"></script>
+</body>
+</html>
