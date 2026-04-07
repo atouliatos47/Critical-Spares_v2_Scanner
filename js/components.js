@@ -277,7 +277,7 @@ const Components = {
                 
             </div>
             <div style="padding:12px 20px; border-bottom:1px solid #e2e5ea; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
-                <div style="display:flex; gap:8px;">
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
                     <button id="sFilterAll" class="filter-btn active" onclick="Components._setStockFilter('all')">All</button>
                     <button id="sFilterLow" class="filter-btn danger" onclick="Components._setStockFilter('low')">Low Stock</button>
                 </div>
@@ -348,7 +348,7 @@ const Components = {
                 
             </div>
             <div style="padding:12px 20px; border-bottom:1px solid #e2e5ea; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
-                <div style="display:flex; gap:8px;">
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
                     <input type="text" id="modalWsName" placeholder="Workstation name *"
                         style="flex:1; padding:10px 12px; border:1px solid #d1d5db; border-radius:8px; font-size:14px;">
                     <input type="text" id="modalWsDesc" placeholder="Description"
