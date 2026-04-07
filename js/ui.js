@@ -7,7 +7,7 @@ const UI = {
     clockInterval: null,
     scanProcessed: false,
     idleTimeout: null,
-    IDLE_SECONDS: 20,
+    IDLE_SECONDS: 120,
 
     // ===== IDLE TIMER =====
     resetIdleTimer() {
