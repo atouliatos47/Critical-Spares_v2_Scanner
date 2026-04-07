@@ -207,10 +207,10 @@ const server = http.createServer(async (req, res) => {
             res.write(`event: init\ndata: ${JSON.stringify({ items: ir.rows.map(mapItem), workstations: wr.rows.map(mapWorkstation) })}\n\n`);
         } catch (e) { console.error('SSE init error:', e); }
         const userName = p.query.name || 'Anonymous';
-        connectedUsers.set(res, { name: userName, connectedAt: new Date().toISOString() });
+        connectedUsers.set(userName, { name: userName, connectedAt: new Date().toISOString() });
         broadcastUserList();
         clients.push(res);
-        req.on('close', () => { clients = clients.filter(c => c !== res); connectedUsers.delete(res); broadcastUserList(); });
+        req.on('close', () => { clients = clients.filter(c => c !== res); connectedUsers.delete(userName); broadcastUserList(); });
         return;
     }
 
