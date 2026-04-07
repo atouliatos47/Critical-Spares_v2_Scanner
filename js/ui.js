@@ -25,6 +25,12 @@ const UI = {
     // ===== HOME SCREEN (splash/screensaver) =====
 
     showHome() {
+        // Don't interrupt if a modal is open
+        if (document.getElementById('modalOverlay')?.classList.contains('show') ||
+            document.getElementById('contentModalOverlay')?.classList.contains('show')) {
+            this.resetIdleTimer();
+            return;
+        }
         const screen = document.getElementById('homeScreen');
         if (screen) {
             screen.classList.remove('hidden');
@@ -32,7 +38,6 @@ const UI = {
         }
         const nav = document.querySelector('.bottom-nav');
         if (nav) nav.style.display = 'none';
-        // Hide any open modals behind the splash
         document.getElementById('modalOverlay')?.classList.remove('show');
         document.getElementById('contentModalOverlay')?.classList.remove('show');
     },
