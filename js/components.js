@@ -274,6 +274,7 @@ const Components = {
         modal.innerHTML = `
             <div style="padding:16px 20px; border-bottom:1px solid #e2e5ea; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
                 <h3 style="margin:0; color:#2D4A5C;">📦 Stock</h3>
+                <button onclick="Components.printAllBarcodes()" style="padding:8px 14px; background:#95C11F; color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; font-size:13px;">🖨 Print All</button>
                 
             </div>
             <div style="padding:12px 20px; border-bottom:1px solid #e2e5ea; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
@@ -489,6 +490,60 @@ const Components = {
         };
         img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
     },
+
+    printAllBarcodes() {
+    const items = API.items;
+    if (!items.length) { Utils.showToast('No items to print'); return; }
+
+    const win = window.open('', '_blank');
+    win.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>All Barcodes – Clamason Critical Spares</title>
+            <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"><\/script>
+            <style>
+                body { margin: 0; padding: 16px; font-family: Arial, sans-serif; background: #fff; }
+                h2 { font-size: 13px; color: #2D4A5C; margin-bottom: 12px; }
+                .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+                .label { border: 1.5px solid #2D4A5C; border-radius: 4px; padding: 6px 8px; text-align: center; page-break-inside: avoid; }
+                .label .top { font-size: 8px; font-weight: 700; color: #2D4A5C; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2px; }
+                .label .code { font-size: 8px; color: #1a1a2e; margin-top: 2px; letter-spacing: 1.5px; font-weight: 600; }
+                .label .name { font-size: 7px; color: #666; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+                svg { display: block; margin: 0 auto; }
+                @media print { button { display: none !important; } body { padding: 0; } }
+            </style>
+        </head>
+        <body>
+            <h2>Clamason Critical Spares – All Barcodes</h2>
+            <button onclick="window.print()" style="margin-bottom:12px; padding:8px 20px; background:#95C11F; border:none; border-radius:6px; font-weight:700; cursor:pointer;">🖨 Print</button>
+            <div class="grid">
+                ${items.map(item => {
+                    const code = (item.partNo && item.partNo.trim())
+                        ? item.partNo.trim()
+                        : 'CLAM-' + String(item.id).padStart(5, '0');
+                    return `
+                        <div class="label">
+                            <div class="top">Clamason</div>
+                            <svg class="bc" data-code="${code}"></svg>
+                            <div class="code">${code}</div>
+                            <div class="name" title="${item.name}">${item.name}</div>
+                        </div>`;
+                }).join('')}
+            </div>
+            <script>
+                document.querySelectorAll('.bc').forEach(svg => {
+                    JsBarcode(svg, svg.dataset.code, {
+                        format: 'CODE128', width: 1.2, height: 32,
+                        displayValue: false, margin: 2
+                    });
+                });
+            <\/script>
+        </body>
+        </html>
+    `);
+    win.document.close();
+},
 
     closeContentModal() {
         document.getElementById('contentModalOverlay').classList.remove('show');
